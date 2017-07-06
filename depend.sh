@@ -7,6 +7,8 @@ then
     exit 1
 fi
 
+yum install -y util-linux-ng-2.17.2-12.28.el6.x86_64
+
 pip install mysql
 pip install docopt
 pip install kafka-python
