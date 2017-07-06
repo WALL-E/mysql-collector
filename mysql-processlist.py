@@ -122,6 +122,7 @@ def main():
 
     for row in rows:
         row["timestamp"] = time.time()
+        row["server"] = "%s:%s" % (host, port)
 
     if verbose:
         print "--content--"
