@@ -9,3 +9,4 @@ fi
 
 pip install mysql
 pip install docopt
+pip install kafka-python
