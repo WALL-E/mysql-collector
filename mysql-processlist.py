@@ -36,7 +36,7 @@ except ImportError:
     print "need kafka-python, please run depend.sh"
     sys.exit(1)
 
-logging.basicConfig(filename="/var/log/mysql-processlist.log", filemode="a+", format="%(asctime)s-%(name)s-%(levelname)s-%(message)s", level=logging.DEBUG)
+logging.basicConfig(filename="/var/log/mysql-processlist.log", filemode="a+", format="%(asctime)s-%(name)s-%(levelname)s-%(message)s", level=logging.INFO)
 
 host = "127.0.0.1"
 port = 3306
