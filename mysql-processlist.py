@@ -44,13 +44,14 @@ user = "root"
 passwd = ""
 db = ""
 connect_timeout = 3
-charset="utf8"
+charset = "utf8"
 
 kafka_hosts = "192.168.1.182:9092"
 kafka_topic = "MYSQL_PROCESSLIST"
 
 verbose = False
 test_sql = False
+
 
 def print_arguments():
     print "--arguments--"
@@ -66,34 +67,36 @@ def print_arguments():
     print "test_sql:", test_sql
     print ""
 
+
 def rebuild_options(arguments):
     global host, port, user, passwd, db, connect_timeout, charset
     global kafka_hosts, kafka_topic
     global verbose, test_sql
     if arguments["--host"]:
-         host = arguments["--host"]
+        host = arguments["--host"]
     if arguments["--port"]:
-         port = int(arguments["--port"])
+        port = int(arguments["--port"])
     if arguments["--user"]:
-         user = arguments["--user"]
+        user = arguments["--user"]
     if arguments["--passwd"]:
-         passwd = arguments["--passwd"]
+        passwd = arguments["--passwd"]
     if arguments["--user"]:
-         user = arguments["--user"]
+        user = arguments["--user"]
     if arguments["--db"]:
-         db = arguments["--db"]
+        db = arguments["--db"]
     if arguments["--connect-timeout"]:
-         connect_timeout = int(arguments["--connect-timeout"])
+        connect_timeout = int(arguments["--connect-timeout"])
     if arguments["--charset"]:
-         charset = arguments["--charset"]
+        charset = arguments["--charset"]
     if arguments["--kafka-hosts"]:
-         kafka_hosts = arguments["--kafka-hosts"]
+        kafka_hosts = arguments["--kafka-hosts"]
     if arguments["--kafka-topic"]:
-         kafka_topic = arguments["--kafka-topic"]
+        kafka_topic = arguments["--kafka-topic"]
     if arguments["--verbose"]:
-         verbose = True
+        verbose = True
     if arguments["--test-sql"]:
-         test_sql = True
+        test_sql = True
+
 
 def main():
     logging.debug("mysql-processlist starting")
@@ -146,6 +149,7 @@ def main():
     logging.info("mysql-processlist send %s messages to kafka" % (len(rows)))
 
     sys.exit(0)
+
 
 if __name__ == '__main__':
     main()
