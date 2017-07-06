@@ -47,7 +47,7 @@ connect_timeout = 3
 charset = "utf8"
 
 kafka_hosts = "192.168.1.182:9092"
-kafka_topic = "MYSQL_PROCESSLIST"
+kafka_topic = "MYSQL_COLLECTOR"
 
 verbose = False
 test_sql = False
