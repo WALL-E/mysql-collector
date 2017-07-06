@@ -121,8 +121,8 @@ def main():
         sys.exit(1)
 
     for row in rows:
-        row["timestamp"] = time.time()
-        row["server"] = "%s:%s" % (host, port)
+        row["Timestamp"] = time.time()
+        row["Server"] = "%s:%s" % (host, port)
 
     if verbose:
         print "--content--"
