@@ -1,5 +1,10 @@
 # mysql-processlist
-mysql processlist output to kafka
+从MySQL数据中采集数据，发送到Kafka
+
+默认采集processlist, 可以修改为任意合法的SQL语句
+```
+show full processlist
+```
 
 # 定时任务
 ```
