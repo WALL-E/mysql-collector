@@ -13,3 +13,23 @@ show full processlist
 
 * 每5分钟采集一次数据
 * 执行前必须要获得排他文件锁，防止脚本同时执行
+
+# 命令行参数说明
+```
+使用默认参数
+./mysql-processlist.py
+
+查看详细信息
+./mysql-processlist.py -v
+
+只测试SQL语句，不连接Kafka
+./mysql-processlist.py -Tv
+
+手动指定Kafka
+./mysql-processlist.py -v --kafka-hosts=192.168.1.182:9092
+./mysql-processlist.py -v --kafka-hosts=192.168.1.182:9092,192.168.1.182:9092
+
+手动指定MySQL服务器
+./mysql-processlist.py -v --host=127.0.0.1
+./mysql-processlist.py -v --host=127.0.0.1 --port=3306
+```
