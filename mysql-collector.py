@@ -1,10 +1,10 @@
 #!/usr/bin/python2.6
 # encoding: utf-8
-"""collect MySQL processlist to kafka
+"""collect MySQL data/status and sedn to kafka
 
 Usage:
-  mysql-processlist.py [-h] [--user=user] [--passwd=passwd] [--host=host] [--port=port] [--db=db] [--charset=charset] [--connect-timeout=timeout] [-v] [--kafka-hosts=list] [--kafka-topic=topic] [--test-sql]
-  mysql-processlist.py --version
+  mysql-collector.py [-h] [--user=user] [--passwd=passwd] [--host=host] [--port=port] [--db=db] [--charset=charset] [--connect-timeout=timeout] [-v] [--kafka-hosts=list] [--kafka-topic=topic] [--test-sql]
+  mysql-collector.py --version
 
 Options:
   -u --user=root            MySQL username, default is root
@@ -55,7 +55,7 @@ test_sql = False
 
 def print_arguments():
     print "--arguments--"
-    print "log:", "/var/log/mysql-processlist.log"
+    print "log:", "/var/log/mysql-collector.log"
     print "host:", host
     print "port:", port
     print "user:", user
@@ -99,7 +99,7 @@ def rebuild_options(arguments):
 
 
 def main():
-    logging.debug("mysql-processlist starting")
+    logging.debug("mysql-collector starting")
     arguments = docopt(__doc__, version='1.0.0rc1')
     rebuild_options(arguments)
 
@@ -115,7 +115,7 @@ def main():
         cursor.close()
         conn.close()
     except Exception, msg:
-        logging.error("mysql-processlist %s" % (msg))
+        logging.error("mysql-collector %s" % (msg))
         if verbose:
             print "error: %s" % (msg)
         sys.exit(1)
@@ -140,14 +140,14 @@ def main():
         producer.flush()
         producer.close()
     except Exception, msg:
-        logging.error("mysql-processlist %s" % (msg))
+        logging.error("mysql-collector %s" % (msg))
         if verbose:
             print "error: %s" % (msg)
         sys.exit(1)
 
     if verbose:
         print "send %s message to kafka" % (len(rows))
-    logging.info("mysql-processlist send %s messages to kafka" % (len(rows)))
+    logging.info("mysql-collector send %s messages to kafka" % (len(rows)))
 
     sys.exit(0)
 
