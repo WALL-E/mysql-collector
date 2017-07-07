@@ -124,11 +124,6 @@ def main():
         row["Timestamp"] = time.time()
         row["Server"] = "%s:%s" % (host, port)
 
-    if verbose:
-        print "--content--"
-        content = json.dumps(rows, ensure_ascii=True, encoding='utf-8')
-        print content
-
     if test_sql:
         sys.exit(0)
 
@@ -137,6 +132,8 @@ def main():
         for row in rows:
             message = json.dumps(row, ensure_ascii=True, encoding='utf-8')
             producer.send(kafka_topic, message)
+            if verbose:
+                print "messages:", message
         producer.flush()
         producer.close()
     except Exception, msg:
