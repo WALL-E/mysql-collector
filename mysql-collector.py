@@ -112,7 +112,7 @@ def mysql_query(sql):
             print "error: %s" % (msg)
         return None
 
-def send2kafka(results):
+def send2kafka(name, results):
     try:
         producer = KafkaProducer(bootstrap_servers=kafka_hosts.split(","))
         for result in results:
@@ -128,7 +128,7 @@ def send2kafka(results):
             print "error: %s" % (msg)
         sys.exit(1)
     if verbose:
-        print "send %s message to kafka" % (len(results))
+        print "send %s %s message to kafka" % (len(results), name)
     logging.info("mysql-collector send %s messages to kafka" % (len(results)))
 
 def handler_processlist(name, results):
@@ -160,14 +160,13 @@ def main():
 
     for plugin in plugins:
         results = mysql_query(plugin["sql"])
-        if results is None:
-            continue
         if test_sql:
             print "sql:", plugin["sql"]
             print "results:", json.dumps(results, ensure_ascii=True, encoding='utf-8')
         else:
-            messages = plugin["handler"](plugin["name"], results)
-            send2kafka(messages)
+            if results is not None:
+                messages = plugin["handler"](plugin["name"], results)
+                send2kafka(plugin["name"], messages)
 
     sys.exit(0)
 
