@@ -16,7 +16,7 @@ Options:
   -C --connect-timeout=3    MySQL server connect timeout, default is 3s
   -T --test-sql             Only execute sql, not send message to kafka
   -k --kafka-hosts=192.168.1.182:9092   Kafka host list, Separated by a comma
-  -t --kafka-topic=MYSQL_PROCESSLIST    Kafka topic
+  -t --kafka-topic=MYSQL_COLLECTOR    Kafka topic
   -h --help             Show this help message and exit
   -v --verbose          Print status messages
   --version             Show version and exit
@@ -36,7 +36,7 @@ except ImportError:
     print "need kafka-python, please run depend.sh"
     sys.exit(1)
 
-logging.basicConfig(filename="/var/log/mysql-processlist.log", filemode="a+", format="%(asctime)s-%(name)s-%(levelname)s-%(message)s", level=logging.INFO)
+logging.basicConfig(filename="/var/log/mysql-collector.log", filemode="a+", format="%(asctime)s-%(name)s-%(levelname)s-%(message)s", level=logging.INFO)
 
 host = "127.0.0.1"
 port = 3306
