@@ -163,7 +163,8 @@ def main():
         if results is None:
             continue
         if test_sql:
-            print json.dumps(results, ensure_ascii=True, encoding='utf-8')
+            print "sql:", plugin["sql"]
+            print "results:", json.dumps(results, ensure_ascii=True, encoding='utf-8')
         else:
             messages = plugin["handler"](plugin["name"], results)
             send2kafka(messages)
