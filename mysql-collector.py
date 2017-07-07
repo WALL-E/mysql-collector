@@ -142,6 +142,14 @@ def handler_processlist(name, results):
         objs.append(obj)
     return objs
 
+plugins = [
+     {
+         "name": "processlist",
+         "sql": "show full processlist",
+         "handler": handler_processlist
+     }
+]
+
 def main():
     logging.debug("mysql-collector starting")
     arguments = docopt(__doc__, version='1.0.0rc1')
@@ -150,22 +158,14 @@ def main():
     if verbose:
         print_arguments()
 
-    configs = [
-        {
-            "name": "processlist",
-            "sql": "show full processlist",
-            "handler": handler_processlist
-        }
-    ]
-
-    for config in configs:
-        results = mysql_query(config["sql"])
+    for plugin in plugins:
+        results = mysql_query(plugin["sql"])
         if results is None:
             continue
         if test_sql:
             print json.dumps(results, ensure_ascii=True, encoding='utf-8')
         else:
-            messages = config["handler"](config["name"], results)
+            messages = plugin["handler"](plugin["name"], results)
             send2kafka(messages)
 
     sys.exit(0)
