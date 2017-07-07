@@ -97,40 +97,26 @@ def rebuild_options(arguments):
     if arguments["--test-sql"]:
         test_sql = True
 
-
-def main():
-    logging.debug("mysql-collector starting")
-    arguments = docopt(__doc__, version='1.0.0rc1')
-    rebuild_options(arguments)
-
-    if verbose:
-        print_arguments()
-
+def mysql_query(sql):
     try:
         conn = MySQLdb.connect(host=host, port=port, user=user, passwd=passwd, db=db, connect_timeout=connect_timeout, charset=charset)
         cursor = conn.cursor(MySQLdb.cursors.DictCursor)
-        sql = 'show full processlist'
         cursor.execute(sql)
         rows = cursor.fetchall()
         cursor.close()
         conn.close()
+        return rows
     except Exception, msg:
         logging.error("mysql-collector %s" % (msg))
         if verbose:
             print "error: %s" % (msg)
-        sys.exit(1)
+        return None
 
-    for row in rows:
-        row["Timestamp"] = time.time()
-        row["Server"] = "%s:%s" % (host, port)
-
-    if test_sql:
-        sys.exit(0)
-
+def send2kafka(results):
     try:
         producer = KafkaProducer(bootstrap_servers=kafka_hosts.split(","))
-        for row in rows:
-            message = json.dumps(row, ensure_ascii=True, encoding='utf-8')
+        for result in results:
+            message = json.dumps(result, ensure_ascii=True, encoding='utf-8')
             producer.send(kafka_topic, message)
             if verbose:
                 print "messages:", message
@@ -141,10 +127,46 @@ def main():
         if verbose:
             print "error: %s" % (msg)
         sys.exit(1)
+    if verbose:
+        print "send %s message to kafka" % (len(results))
+    logging.info("mysql-collector send %s messages to kafka" % (len(results)))
+
+def handler_processlist(name, results):
+    objs = []
+    for result in results:
+        result["Timestamp"] = time.time()
+        result["Server"] = "%s:%s" % (host, port)
+        obj = {}
+        obj["name"] = name
+        obj["data"] = result
+        objs.append(obj)
+    return objs
+
+def main():
+    logging.debug("mysql-collector starting")
+    arguments = docopt(__doc__, version='1.0.0rc1')
+    rebuild_options(arguments)
 
     if verbose:
-        print "send %s message to kafka" % (len(rows))
-    logging.info("mysql-collector send %s messages to kafka" % (len(rows)))
+        print_arguments()
+
+    configs = [
+        {
+            "name": "processlist",
+            "sql": "show full processlist",
+            "handler": handler_processlist
+        }
+    ]
+
+    for config in configs:
+        results = mysql_query(config["sql"])
+        if results is None:
+            continue
+        if test_sql:
+            print json.dumps(results, ensure_ascii=True, encoding='utf-8')
+        else:
+            messages = config["handler"](config["name"], results)
+            send2kafka(messages)
 
     sys.exit(0)
 
