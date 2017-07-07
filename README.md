@@ -1,4 +1,4 @@
-# mysql-processlist
+# mysql-collector
 从MySQL数据中采集数据，发送到Kafka
 
 默认采集processlist, 可以修改为任意合法的SQL语句
