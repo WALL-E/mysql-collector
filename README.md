@@ -8,7 +8,7 @@ show full processlist
 
 # 定时任务
 ```
-*/5 * * * * flock -xn /tmp/mysql-processlist.lock -c '/root/mysql-processlist/mysql-processlist.py'
+*/5 * * * * flock -xn /tmp/mysql-processlist.lock -c '/apps/mysql-collector/mysql-processlist.py'
 ```
 
 * 每5分钟采集一次数据
@@ -34,5 +34,5 @@ show full processlist
 ./mysql-processlist.py -v --host=127.0.0.1 --port=3306
 
 手动指定MySQL服务器和Kafka服务器
-./mysql-processlist.py -v --host=127.0.0.1 --port=3306 --kafka-hosts=10.19.33.244:9092,10.19.40.117:9092
+/apps/mysql-collector/mysql-processlist.py -v --host=127.0.0.1 --port=3306 --kafka-hosts=10.19.33.244:9092,10.19.40.117:9092
 ```
